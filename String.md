@@ -98,3 +98,105 @@ class Solution {
     }
 }
 ```
+## 1221. Split a String in Balanced Strings
+```java
+class Solution {
+    public int balancedStringSplit(String s) {
+        int count=0;
+        int balance=0;
+        for(int i=0;i<s.length();i++)
+        {
+            char ch=s.charAt(i);
+            if(ch=='L')
+            {
+               balance++;
+            }
+            else{
+                balance--;
+            }
+            if(balance==0)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+}
+```
+### 1647. Minimum Deletions to Make Character Frequencies Unique
+## Intution
+ 1. Count frequencies.
+2. Maintain a Set of used frequencies.
+For each frequency:
+ - While it is already in the set:
+- Decrease frequency by 1
+- Count deletion
+- Add final frequency to set
+This is Greedy.
+```java
+class Solution {
+    public int minDeletions(String s) {
+        HashMap<Character,Integer>hm=new HashMap<>();
+        for(char ch:s.toCharArray())
+        {
+            hm.put(ch,hm.getOrDefault(ch,0)+1);
+        }
+        int count=0;
+        Set<Integer>hs=new HashSet<>();
+        for(Map.Entry<Character,Integer>it:hm.entrySet())
+        {
+            char key=it.getKey();
+            int val=it.getValue();
+            while(hs.contains(val))
+            {
+               val=val-1;
+               count++;
+            }
+            if(val!=0)
+            hs.add(val);
+        }
+        return count;
+    }
+}
+```
+### 2091. Removing Minimum and Maximum From Array
+Key Idea Recap (Very Important)
+We only care about:
+minIndex
+maxIndex
+n = nums.length
+Then we consider 3 strategies:
+1️⃣ Delete from front only
+2️⃣ Delete from back only
+3️⃣ Delete from both sides
+
+```java
+class Solution {
+    public int minimumDeletions(int[] nums) {
+        int minIndex=0;
+        int maxIndex=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            if(nums[minIndex]>nums[i])
+            {
+                minIndex=i;
+            }
+        }
+        for(int i=0;i<nums.length;i++)
+        {
+             if(nums[maxIndex]<nums[i])
+            {
+                maxIndex=i;
+            }
+        }
+        int left=Math.min(minIndex,maxIndex);
+        int right=Math.max(minIndex,maxIndex);
+        int deleteFromFront=right+1;
+        int deleteFromBack=nums.length-left;
+        int deleteFromBoth=(left+1)+(nums.length-right);
+
+        int ans=Math.min(deleteFromFront,Math.min(deleteFromBack,deleteFromBoth));
+        return ans;
+    }
+}
+```
