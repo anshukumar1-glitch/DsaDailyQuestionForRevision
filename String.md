@@ -200,3 +200,116 @@ class Solution {
     }
 }
 ```
+### 1423. Maximum Points You Can Obtain from Cards
+```java
+class Solution {
+    public int maxScore(int[] cardPoints, int k) {
+        int[]prefix=new int[cardPoints.length];
+        int []suffix=new int[cardPoints.length];
+        prefix[0]=cardPoints[0];
+        int n=cardPoints.length;
+        suffix[n-1]=cardPoints[n-1];
+        for(int i=1;i<n;i++)
+        {
+            prefix[i]=prefix[i-1]+cardPoints[i];
+        }
+        for(int i=n-2;i>=0;i--)
+        {
+            suffix[i]=suffix[i+1]+cardPoints[i];
+        }
+
+        int max=0;
+        for(int i=0;i<=k;i++)
+        {
+            int left=0;
+            int right=0;
+            if(i>0)
+            {
+              left=prefix[i-1];
+            }
+            if(k-i>0)
+            {
+                right=suffix[n-(k-i)];
+            }
+            max=Math.max((left+right),max);
+        }
+        return max;
+    }
+}
+```
+Core Idea:-
+You must take exactly k cards.
+If you take:
+i cards from the left
+then you must take k - i cards from the right
+Because:
+total cards taken = k
+i (left) + (k - i) (right) = k
+The Loop
+for (int i = 0; i <= k; i++)
+
+This loop tries all possible distributions of cards.
+If k = 3, the loop runs like this:
+i (left)	k - i (right)
+0	3
+1	2
+2	1
+3	0
+
+So we check:
+0 left + 3 right
+1 left + 2 right
+2 left + 1 right
+3 left + 0 right
+This guarantees we don’t miss any possible valid combination.
+
+### 2379. Minimum Recolors to Get K Consecutive Black Blocks
+```java
+class Solution {
+    public int minimumRecolors(String arr, int k) {
+       //Handling if the the colour exist
+       int count=0;
+       for(int i=0;i<arr.length();i++)
+       {
+        char ch=arr.charAt(i);
+        if(count==k)
+        {
+            return 0;
+        }
+        if(ch=='B')
+        {
+            count++;
+        }
+        else{
+            count=0;
+        }
+       } 
+       int i=0;
+       int j=0;
+       count=0;
+       int min=Integer.MAX_VALUE;
+       while(j<arr.length())
+       {
+          char ch=arr.charAt(j);
+           if(ch=='W')
+          {
+            count++;
+          }
+          while(j-i+1>k)
+          {
+            if(arr.charAt(i)=='W'){
+            count--;
+            }
+            i++;
+          }
+          if(j-i+1==k)
+          {
+            min=Math.min(count,min);
+          }
+          System.out.println(min+",i="+i+",j="+j);
+          j++;
+       }
+       return min;
+    }
+}
+```
