@@ -313,3 +313,101 @@ class Solution {
     }
 }
 ```
+
+### 724. Find Pivot Index
+Given an array of integers nums, calculate the pivot index of this array.
+The pivot index is the index where the sum of all the numbers strictly to the left of the index is equal to the sum of all the numbers strictly to the index's right.
+If the index is on the left edge of the array, then the left sum is 0 because there are no elements to the left. This also applies to the right edge of the array.
+Return the leftmost pivot index. If no such index exists, return -1.
+
+```java
+class Solution {
+    public int pivotIndex(int[] nums) {
+        int psum[]=new int[nums.length];
+        psum[0]=nums[0];
+        int n=nums.length;
+        for(int i=1;i<n;i++)
+        {
+         psum[i]=psum[i-1]+nums[i];
+        }
+        if(psum[n-1]-psum[0]==0)
+        {
+            return 0;
+        }
+        for(int i=1;i<n;i++)
+        {
+            if(psum[i-1]==psum[n-1]-psum[i])
+            {
+                return i;
+            }
+        }
+        if(psum[n-1]==0)
+        {
+            return n-1;
+        }
+        return -1;
+    }
+}
+```
+### LeetCode 438. and also like count no of occurences of geeksforgeeks(2 questions)
+Correct Sliding Window Behavior
+You correctly:
+Decrease frequency when expanding window
+Decrease count only when frequency hits 0
+When window size == k:
+If count == 0 → valid anagram
+Restore frequency when shrinking window
+Increase count when needed
+This logic is correct.
+```java
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer>ls=new ArrayList<>();
+        int i=0;
+        int j=0;
+        Map<Character,Integer>hm=new HashMap<>();
+        for(char ch:p.toCharArray())
+        {
+            hm.put(ch,hm.getOrDefault(ch,0)+1);
+        }
+         int count=hm.size();
+        int k=p.length();
+        while(j<s.length())
+        {
+           char cur=s.charAt(j);
+           if(hm.containsKey(cur))
+           {
+            hm.put(cur,hm.get(cur)-1);
+            if(hm.get(cur)==0)
+            {
+                count--;
+            }
+           }
+           if(j-i+1<p.length())
+           {
+            j++;
+           }
+           else if(j-i+1==k)
+           {
+            if(count==0)
+            {
+                ls.add(i);
+            }
+            char ch=s.charAt(i);
+            if(hm.containsKey(ch))
+            {
+                hm.put(ch,hm.get(ch)+1);
+                if(hm.get(ch)==1)
+                {
+                    count++;
+                }
+            }
+            i++;
+            j++;
+           }
+
+        }
+        return ls;
+    }
+}
+```
