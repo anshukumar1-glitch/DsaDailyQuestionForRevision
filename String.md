@@ -411,3 +411,5 @@ class Solution {
     }
 }
 ```
+### Leetcode 567 is also similar to previous one rememeber that.
+
